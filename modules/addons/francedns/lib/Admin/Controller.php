@@ -48,7 +48,7 @@ class Controller {
 		{
 			//API Call
 			$api_params=array($username, $password,"EN",API_SRC);
-			$IDSession = $clientSOAP->__soapCall("login",$api_params);
+			$IDSession = $clientSOAP->__soapCall("sessionOpen",$api_params);
 		}
 		catch(SoapFault $fault)
 		{
@@ -68,7 +68,7 @@ class Controller {
 		catch(SoapFault $fault)
 		{
 			$values["error"] = $fault->getMessage();
-			$clientSOAP->__soapCall("logout",array($IDSession)) ;
+			$clientSOAP->__soapCall("sessionClose",array($IDSession)) ;
 			return $values;
 		}
 		
@@ -89,7 +89,7 @@ class Controller {
 		# disconnection from the francedns's API
 		# ----------------------------------------------------------------------
 		if(isset($IDSession))
-			$clientSOAP->__soapCall("logout",array($IDSession)) ;
+			$clientSOAP->__soapCall("sessionClose",array($IDSession)) ;
 		
 		return $values;
 	}	
@@ -179,6 +179,9 @@ class Controller {
 		$arrondir = $vars['arrondir'];
 		$result = $vars['result'];
 		        
+		//$apiget = localAPI("francedns", array("action" => "getlocalprices"), "marbas");
+		//var_dump($apiget);
+				
 		$prices = $this->getPrices();
 		$exts = $prices['exts'];
 		$francednsprices = $prices['fdns'];
